@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.header{
+    width: 100%;
+    height: 100vh;
+    background-color: #123;
+}
+.nov{
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 0  25px 0 25px;
+    align-items: center;
+    height: 50px;
+}
+.conteant ul{
+list-style: none;
+display: flex;
+gap:15px;
+}
+.conteant ul li a{
+    text-decoration: none;
+    color: #000;
+}
