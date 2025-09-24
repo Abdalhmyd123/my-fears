@@ -1,25 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>my progeact</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Number Manager - Shared</title>
+<style>
+body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #1A2980, #26D0CE); height:100vh; color:#fff; display:flex; flex-direction:column; align-items:center; padding:40px; }
+h1 { color:#fff; }
+.input-wrapper { position:relative; display:flex; align-items:center; gap:10px; margin:15px; }
+input { padding:10px; font-size:16px; width:200px; border-radius:10px; border:none; }
+.status-icon { position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:18px; }
+.counter-box { width:60px; text-align:center; font-size:16px; font-weight:bold; padding:10px; border-radius:10px; background: rgba(255,255,255,0.1); color:#fff; }
+.button-group { display:flex; gap:10px; margin-bottom:10px; }
+button { padding:10px 15px; font-size:16px; cursor:pointer; border:none; border-radius:8px; transition:0.3s; color:white; }
+button:nth-child(1){ background:linear-gradient(to right,#3A6F43,#59AC77); }
+button:nth-child(2){ background:linear-gradient(#ffffff55,#00000055); }
+button:nth-child(3){ background:linear-gradient(#ffffff55,#00000055); }
+ul { list-style:none; padding:0; margin-top:20px; width:300px; }
+li { padding:10px; margin:5px 0; background:rgba(255,255,255,0.1); border-radius:8px; display:flex; justify-content:space-between; align-items:center; position:relative; }
+.completed { text-decoration:line-through; color:#6c757d; }
+.note { font-size:14px; color:#fff; margin-left:10px; }
+.delete-icon, .note-icon { position:absolute; top:50%; transform:translateY(-50%); font-size:20px; cursor:pointer; }
+.delete-icon { right:-40px; color:red; }
+.note-icon { right:-80px; color:#fff; }
+.error { color:red; margin-top:10px; }
+.hidden { display:none; }
+.modal { position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center; opacity:0; pointer-events:none; transition:0.3s; }
+.modal.show { opacity:1; pointer-events:auto; }
+.modal-content { background:#1e1e1e; padding:20px; border-radius:12px; text-align:center; width:80%; max-width:300px; border:2px solid #28a745; }
+.modal-content input { width:90%; padding:8px; border-radius:8px; border:1px solid #28a745; background:#2a2a2a; color:#fff; }
+.modal-content button { margin-top:10px; padding:8px 15px; border:none; border-radius:8px; cursor:pointer; }
+.save-btn { background:#28a745; color:#fff; }
+.cancel-btn { background:#dc3545; color:#fff; }
+</style>
+
+<script type="module">
+  // 1️⃣ استيراد Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+  // 2️⃣ تكوين Firebase (ضع القيم التي لديك)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiaSQrXUUXxzmwcvLOBz2-Gv7rbR8KLDQ",
+    authDomain: "numbers-manager.firebaseapp.com",
+    projectId: "numbers-manager",
+    storageBucket: "numbers-manager.firebasestorage.app",
+    messagingSenderId: "567590629793",
+    appId: "1:567590629793:web:cf9e0ae5e7e9f65a651be0",
+    measurementId: "G-B02R8H2DND"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+</script>
 </head>
 <body>
-   <div class="header">
-    <div class="nov">
-        <div class="logo">
-           <img src="/img_1.png" alt="logo">
-        </div>
-        <div class="conteant">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Home</a></li>
-               <li><a href="#">Home</a></li>
-            </ul> 
-        </div>
-    </div>
-   </div>
+
+<h1>Number Manager - Shared</h1>
+
+<div class="input-wrapper">
+  <input type="number" id="numberInput" placeholder="Enter a number" oninput="checkDuplicate()" min="10" max="999">
+  <span id="statusIcon" class="status-icon"></span>
+  <div id="groupCounter" class="counter-box">0</div>
+</div>
+
+<div class="button-group">
+  <button onclick="addNumber()">➕ Add</button>
+  <button onclick="searchNumber()">🔍 Search</button>
+  <button onclick="reloadPage()">🔄 Clear All</button>
+</div>
+
+<p id="errorMsg" class="error hidden"></p>
+
+<ul id="numberList"></ul>
+
+<div class="modal" id="noteModal">
+  <div class="modal-content">
+    <h3>إضافة / تعديل ملاحظة</h3>
+    <input type="text" id="noteInput" placeholder="اكتب ملاحظتك هنا">
+    <br>
+    <button class="save-btn" onclick="saveNote()">💾 حفظ</button>
+    <button class="cancel-btn" onclick="closeModal()">❌ إلغاء</button>
+  </div>
+</div>
+
+<script type="module">
+  const numberList = document.getElementById('numberList');
+  const numberInput = document.getElementById('numberInput');
+  const errorMsg = document.getElementById('errorMsg');
+  const statusIcon = document.getElementById('statusIcon');
+  const noteModal = document.getElementById("noteModal");
+  const noteInput = document.getElementById("noteInput");
+  const groupCounter = document.getElementById("groupCounter");
+
+  let editingId = null;
+
+  // 1️⃣ إضافة رقم جديد
+  async function addNumber(){
+    const value = numberInput.value.trim();
+    if(value.length<2 || value.length>3){
+      errorMsg.textContent="⚠️ يجب إدخال رقم من خانتين إلى ثلاث خانات فقط";
+      errorMsg.classList.remove('hidden');
+      return;
+    }
+    try{ await addDoc(collection(db,"numbers"),{ number:value, completed:false, note:"" });
+      numberInput.value=''; errorMsg.classList.add('hidden');
+    }catch(e){ console.error(e); }
+  }
+
+  // 2️⃣ عرض القائمة مباشرة من Firestore
+  onSnapshot(collection(db,"numbers"), snapshot=>{
+    numberList.innerHTML='';
+    let count=0;
+    snapshot.forEach(docSnap=>{
+      const item = docSnap.data();
+      const li = document.createElement('li');
+      li.textContent = item.number;
+      li.dataset.id = docSnap.id;
+      count++;
+      if(item.completed) li.classList.add('completed');
+
+      if(item.note){
+        const noteSpan = document.createElement('span');
+        noteSpan.classList.add('note');
+        noteSpan.textContent = `(${item.note})`;
+        li.appendChild(noteSpan);
+      }
+
+      const deleteIcon = document.createElement("span");
+      deleteIcon.classList.add("delete-icon");
+      deleteIcon.textContent="🗑";
+      deleteIcon.onclick=async()=>{ await deleteDoc(doc(db,"numbers",docSnap.id)); }
+      li.appendChild(deleteIcon);
+
+      const noteIcon = document.createElement("span");
+      noteIcon.classList.add("note-icon");
+      noteIcon.textContent="📒";
+      noteIcon.onclick=()=>{ editingId=docSnap.id; noteInput.value=item.note||""; noteModal.classList.add("show"); }
+      li.appendChild(noteIcon);
+
+      li.onclick=async()=>{ await updateDoc(doc(db,"numbers",docSnap.id),{ completed: !item.completed }); }
+
+      numberList.appendChild(li);
+    });
+    groupCounter.textContent=count;
+  });
+
+  // 3️⃣ البحث
+  async function searchNumber(){
+    const searchValue=numberInput.value.trim();
+    let found=false;
+    const snapshot = await getDocs(collection(db,"numbers"));
+    snapshot.forEach(docSnap=>{
+      if(docSnap.data().number===searchValue){ found=true; updateDoc(doc(db,"numbers",docSnap.id),{ completed:true }); }
+    });
+    if(!found && searchValue!==''){ errorMsg.textContent="⚠️ الرقم غير موجود"; errorMsg.classList.remove('hidden'); }
+    else errorMsg.classList.add('hidden');
+  }
+
+  // 4️⃣ حفظ الملاحظة
+  async function saveNote(){
+    if(editingId){ await updateDoc(doc(db,"numbers",editingId),{ note: noteInput.value.trim() }); closeModal(); }
+  }
+  function closeModal(){ noteModal.classList.remove("show"); }
+
+  // 5️⃣ مسح كل الأرقام
+  function reloadPage(){
+    if(confirm("هل أنت متأكد أنك تريد حذف كل الأرقام؟")){
+      getDocs(collection(db,"numbers")).then(snap=>{ snap.forEach(d=>deleteDoc(doc(db,"numbers",d.id))); });
+    }
+  }
+
+  // 6️⃣ تحقق من الرقم المكرر
+  async function checkDuplicate(){
+    const value=numberInput.value.trim();
+    if(value===''){ statusIcon.textContent=''; return; }
+    let duplicate=false;
+    const snapshot=await getDocs(collection(db,"numbers"));
+    snapshot.forEach(docSnap=>{ if(docSnap.data().number===value) duplicate=true; });
+    if(duplicate){ statusIcon.textContent='✔️'; statusIcon.style.color='green'; }
+    else{ statusIcon.textContent='❌'; statusIcon.style.color='red'; }
+  }
+
+  numberInput.addEventListener("keypress", e=>{ if(e.key==="Enter") addNumber(); });
+</script>
+
 </body>
 </html>
