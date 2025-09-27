@@ -2,65 +2,71 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Number Manager - Shared</title>
+<title>Number Manager</title>
 <style>
-body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #1A2980, #26D0CE); height:100vh; color:#fff; display:flex; flex-direction:column; align-items:center; padding:40px; }
-h1 { color:#fff; }
-.input-wrapper { position:relative; display:flex; align-items:center; gap:10px; margin:15px; }
-input { padding:10px; font-size:16px; width:200px; border-radius:10px; border:none; }
-.status-icon { position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:18px; }
-.counter-box { width:60px; text-align:center; font-size:16px; font-weight:bold; padding:10px; border-radius:10px; background: rgba(255,255,255,0.1); color:#fff; }
-.button-group { display:flex; gap:10px; margin-bottom:10px; }
-button { padding:10px 15px; font-size:16px; cursor:pointer; border:none; border-radius:8px; transition:0.3s; color:white; }
-button:nth-child(1){ background:linear-gradient(to right,#3A6F43,#59AC77); }
-button:nth-child(2){ background:linear-gradient(#ffffff55,#00000055); }
-button:nth-child(3){ background:linear-gradient(#ffffff55,#00000055); }
-ul { list-style:none; padding:0; margin-top:20px; width:300px; }
-li { padding:10px; margin:5px 0; background:rgba(255,255,255,0.1); border-radius:8px; display:flex; justify-content:space-between; align-items:center; position:relative; }
-.completed { text-decoration:line-through; color:#6c757d; }
-.note { font-size:14px; color:#fff; margin-left:10px; }
-.delete-icon, .note-icon { position:absolute; top:50%; transform:translateY(-50%); font-size:20px; cursor:pointer; }
-.delete-icon { right:-40px; color:red; }
-.note-icon { right:-80px; color:#fff; }
-.error { color:red; margin-top:10px; }
-.hidden { display:none; }
-.modal { position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center; opacity:0; pointer-events:none; transition:0.3s; }
-.modal.show { opacity:1; pointer-events:auto; }
-.modal-content { background:#1e1e1e; padding:20px; border-radius:12px; text-align:center; width:80%; max-width:300px; border:2px solid #28a745; }
-.modal-content input { width:90%; padding:8px; border-radius:8px; border:1px solid #28a745; background:#2a2a2a; color:#fff; }
-.modal-content button { margin-top:10px; padding:8px 15px; border:none; border-radius:8px; cursor:pointer; }
-.save-btn { background:#28a745; color:#fff; }
-.cancel-btn { background:#dc3545; color:#fff; }
+body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #1A2980, #26D0CE);height="100vh";color: #fff; display: flex; flex-direction: column; align-items: center; padding: 40px; }
+h1 { color: #fff; }
+.root{
+  color: #fff;
+}
+
+.input-wrapper { position: relative; display: flex; align-items: center; gap: 10px; margin: 15px; border: 2px soli#123; color:#fff;}
+
+input { padding: 10px; background: rgba(255, 255, 255, 0.1);font-size: 16px; width: 200px; border-radius: 10px;box-shadow: 10px 10px 10px  rgba(0, 0, 0, 3); border: 2px soli#123;border: none; }
+
+.status-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; }
+
+.counter-box {
+  width: 60px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid #0000055;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 10px 10px 10px  rgba(0, 0, 0, 3);
+  color: #ffffff;
+}
+
+.button-group { display: flex; gap: 10px; margin-bottom: 10px; }
+button { padding: 10px 15px; font-size: 16px; cursor: pointer; border: none; border-radius: 8px; transition: 0.3s; }
+button:nth-child(1) { 
+  background: linear-gradient(to right, #3A6F43, #59AC77);box-shadow: 10px 10px 10px  rgba(0, 0, 0, 3);
+   ; color: white; }
+button:nth-child(2) { background: linear-gradient(#ffffff55,#00000055) ;box-shadow: 10px 10px 10px  rgba(0, 0, 0, 3);; color: white; }
+button:nth-child(3) { background: linear-gradient(#ffffff55,#00000055)#DF1151;box-shadow: 10px 10px 10px  rgba(0, 0, 0, 3);; color: white; }
+
+ul { list-style: none; padding: 0; margin-top: 20px; width: 300px; }
+li { padding: 10px; margin: 5px 0; background: rgba(255, 255, 255, 0.1); border: 1px solid #0D141A; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; position: relative; overflow: hidden; transition: transform 0.3s ease;box-shadow: 10px 10px 10px  rgba(0, 0, 0, 3) }
+.completed { text-decoration: line-through; color: #6c757d; }
+.note { font-size: 19px; color: #ffffff; margin-left: 10px; }
+.delete-icon, .note-icon { position: absolute; top: 50%; transform: translateY(-50%); font-size: 20px; transition: 0.3s ease; }
+.delete-icon { left: -40px; color: red; }
+.note-icon { right: -40px; color: #ffffff55; }
+
+.error { color: red; margin-top: 10px; }
+.hidden { display: none; }
+
+footer { margin-top: 50px; font-size: 14px; color: #888; }
+
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.modal.show { opacity: 1; pointer-events: auto; }
+.modal-content { background: #1e1e1e; padding: 20px; border-radius: 12px; text-align: center; width: 80%; max-width: 300px; border: 2px solid #28a745; animation: fadeIn 0.3s ease; }
+.modal-content input { width: 90%; padding: 8px; border-radius: 8px; border: 1px solid #28a745; background: #2a2a2a; color: #fff; }
+.modal-content button { margin-top: 10px; padding: 8px 15px; border: none; border-radius: 8px; cursor: pointer; }
+.save-btn { background: #28a745; color: #fff; }
+.cancel-btn { background: #dc3545; color: #fff; }
+
+@keyframes fadeIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
-
-<script type="module">
-  // 1️⃣ استيراد Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-  import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-
-  // 2️⃣ تكوين Firebase (ضع القيم التي لديك)
-  const firebaseConfig = {
-    apiKey: "AIzaSyDiaSQrXUUXxzmwcvLOBz2-Gv7rbR8KLDQ",
-    authDomain: "numbers-manager.firebaseapp.com",
-    projectId: "numbers-manager",
-    storageBucket: "numbers-manager.firebasestorage.app",
-    messagingSenderId: "567590629793",
-    appId: "1:567590629793:web:cf9e0ae5e7e9f65a651be0",
-    measurementId: "G-B02R8H2DND"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const db = getFirestore(app);
-</script>
 </head>
 <body>
 
-<h1>Number Manager - Shared</h1>
+<h1 style="color: #ffffff85;">Number Manager</h1>
 
 <div class="input-wrapper">
-  <input type="number" id="numberInput" placeholder="Enter a number" oninput="checkDuplicate()" min="10" max="999">
+  <input type="number" id="numberInput" placeholder="Enter a number" oninput="limitInputLength(); checkDuplicate()" min="10" max="999">
   <span id="statusIcon" class="status-icon"></span>
   <div id="groupCounter" class="counter-box">0</div>
 </div>
@@ -68,12 +74,14 @@ li { padding:10px; margin:5px 0; background:rgba(255,255,255,0.1); border-radius
 <div class="button-group">
   <button onclick="addNumber()">➕ Add</button>
   <button onclick="searchNumber()">🔍 Search</button>
-  <button onclick="reloadPage()">🔄 Clear All</button>
+  <button onclick="reloadPage()">🔄 Reload Page</button>
 </div>
 
 <p id="errorMsg" class="error hidden"></p>
 
 <ul id="numberList"></ul>
+
+<footer style="color: green;font-size: 15px;">copypeast@Abdalhmydawad</footer>
 
 <div class="modal" id="noteModal">
   <div class="modal-content">
@@ -85,105 +93,159 @@ li { padding:10px; margin:5px 0; background:rgba(255,255,255,0.1); border-radius
   </div>
 </div>
 
-<script type="module">
-  const numberList = document.getElementById('numberList');
-  const numberInput = document.getElementById('numberInput');
-  const errorMsg = document.getElementById('errorMsg');
-  const statusIcon = document.getElementById('statusIcon');
-  const noteModal = document.getElementById("noteModal");
-  const noteInput = document.getElementById("noteInput");
-  const groupCounter = document.getElementById("groupCounter");
+<script>
+const numberList = document.getElementById('numberList');
+const numberInput = document.getElementById('numberInput');
+const errorMsg = document.getElementById('errorMsg');
+const statusIcon = document.getElementById('statusIcon');
+const noteModal = document.getElementById("noteModal");
+const noteInput = document.getElementById("noteInput");
+const groupCounter = document.getElementById("groupCounter");
 
-  let editingId = null;
+let numbers = [];
+let editingIndex = null;
 
-  // 1️⃣ إضافة رقم جديد
-  async function addNumber(){
-    const value = numberInput.value.trim();
-    if(value.length<2 || value.length>3){
-      errorMsg.textContent="⚠️ يجب إدخال رقم من خانتين إلى ثلاث خانات فقط";
-      errorMsg.classList.remove('hidden');
-      return;
-    }
-    try{ await addDoc(collection(db,"numbers"),{ number:value, completed:false, note:"" });
-      numberInput.value=''; errorMsg.classList.add('hidden');
-    }catch(e){ console.error(e); }
+window.onload = function () {
+  const saved = localStorage.getItem('savedNumbers');
+  if (saved) {
+    numbers = JSON.parse(saved);
+    renderList();
   }
+};
 
-  // 2️⃣ عرض القائمة مباشرة من Firestore
-  onSnapshot(collection(db,"numbers"), snapshot=>{
-    numberList.innerHTML='';
-    let count=0;
-    snapshot.forEach(docSnap=>{
-      const item = docSnap.data();
-      const li = document.createElement('li');
-      li.textContent = item.number;
-      li.dataset.id = docSnap.id;
-      count++;
-      if(item.completed) li.classList.add('completed');
+function saveNumbers() {
+  localStorage.setItem('savedNumbers', JSON.stringify(numbers));
+  updateGroupCounter();
+}
 
-      if(item.note){
-        const noteSpan = document.createElement('span');
-        noteSpan.classList.add('note');
-        noteSpan.textContent = `(${item.note})`;
-        li.appendChild(noteSpan);
-      }
+function limitInputLength() {
+  if (numberInput.value.length > 3) numberInput.value = numberInput.value.slice(0, 3);
+}
 
-      const deleteIcon = document.createElement("span");
-      deleteIcon.classList.add("delete-icon");
-      deleteIcon.textContent="🗑";
-      deleteIcon.onclick=async()=>{ await deleteDoc(doc(db,"numbers",docSnap.id)); }
-      li.appendChild(deleteIcon);
+function addNumber() {
+  const value = numberInput.value.trim();
+  if (value.length < 2 || value.length > 3) {
+    errorMsg.textContent = "⚠️ يجب إدخال رقم من خانتين إلى ثلاث خانات فقط";
+    errorMsg.classList.remove('hidden');
+    return;
+  }
+  if (numbers.some(item => item.number === value)) {
+    errorMsg.textContent = "⚠️ هذا الرقم موجود بالفعل";
+    errorMsg.classList.remove('hidden');
+    return;
+  }
+  numbers.push({ number: value, completed: false, note: "" });
+  saveNumbers();
+  renderList();
+  numberInput.value = '';
+  numberInput.focus();
+  errorMsg.classList.add('hidden');
+}
 
-      const noteIcon = document.createElement("span");
-      noteIcon.classList.add("note-icon");
-      noteIcon.textContent="📒";
-      noteIcon.onclick=()=>{ editingId=docSnap.id; noteInput.value=item.note||""; noteModal.classList.add("show"); }
-      li.appendChild(noteIcon);
-
-      li.onclick=async()=>{ await updateDoc(doc(db,"numbers",docSnap.id),{ completed: !item.completed }); }
-
-      numberList.appendChild(li);
-    });
-    groupCounter.textContent=count;
+function searchNumber() {
+  const searchValue = numberInput.value.trim();
+  let found = false;
+  numbers = numbers.map(item => {
+    if (item.number === searchValue) {
+      item.completed = true;
+      found = true;
+    }
+    return item;
   });
+  saveNumbers();
+  renderList();
+  if (!found && searchValue !== '') { errorMsg.textContent = "⚠️ الرقم غير موجود"; errorMsg.classList.remove('hidden'); }
+  else errorMsg.classList.add('hidden');
+}
 
-  // 3️⃣ البحث
-  async function searchNumber(){
-    const searchValue=numberInput.value.trim();
-    let found=false;
-    const snapshot = await getDocs(collection(db,"numbers"));
-    snapshot.forEach(docSnap=>{
-      if(docSnap.data().number===searchValue){ found=true; updateDoc(doc(db,"numbers",docSnap.id),{ completed:true }); }
-    });
-    if(!found && searchValue!==''){ errorMsg.textContent="⚠️ الرقم غير موجود"; errorMsg.classList.remove('hidden'); }
-    else errorMsg.classList.add('hidden');
-  }
-
-  // 4️⃣ حفظ الملاحظة
-  async function saveNote(){
-    if(editingId){ await updateDoc(doc(db,"numbers",editingId),{ note: noteInput.value.trim() }); closeModal(); }
-  }
-  function closeModal(){ noteModal.classList.remove("show"); }
-
-  // 5️⃣ مسح كل الأرقام
-  function reloadPage(){
-    if(confirm("هل أنت متأكد أنك تريد حذف كل الأرقام؟")){
-      getDocs(collection(db,"numbers")).then(snap=>{ snap.forEach(d=>deleteDoc(doc(db,"numbers",d.id))); });
+function renderList() {
+  numberList.innerHTML = '';
+  numbers.forEach((item, index) => {
+    const li = document.createElement('li');
+    li.innerHTML = `${item.number}${item.completed ? " - تم إنهاء المهمة" : ""}`;
+    
+    if (item.note) {
+      const noteSpan = document.createElement('span');
+      noteSpan.classList.add("note");
+      noteSpan.textContent = `(${item.note})`;
+      li.appendChild(noteSpan);
     }
-  }
+    if (item.completed) li.classList.add('completed');
 
-  // 6️⃣ تحقق من الرقم المكرر
-  async function checkDuplicate(){
-    const value=numberInput.value.trim();
-    if(value===''){ statusIcon.textContent=''; return; }
-    let duplicate=false;
-    const snapshot=await getDocs(collection(db,"numbers"));
-    snapshot.forEach(docSnap=>{ if(docSnap.data().number===value) duplicate=true; });
-    if(duplicate){ statusIcon.textContent='✔️'; statusIcon.style.color='green'; }
-    else{ statusIcon.textContent='❌'; statusIcon.style.color='red'; }
-  }
+    const deleteIcon = document.createElement("span");
+    deleteIcon.classList.add("delete-icon");
+    deleteIcon.textContent = "🗑";
+    li.appendChild(deleteIcon);
 
-  numberInput.addEventListener("keypress", e=>{ if(e.key==="Enter") addNumber(); });
+    const noteIcon = document.createElement("span");
+    noteIcon.classList.add("note-icon");
+    noteIcon.textContent = "📒";
+    li.appendChild(noteIcon);
+
+    let startX = 0;
+    li.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+    li.addEventListener("touchmove", e => {
+      let moveX = e.touches[0].clientX - startX;
+      li.style.transform = `translateX(${moveX}px)`;
+      if (moveX > 0) deleteIcon.style.left = `${Math.min(moveX - 40, 10)}px`;
+      else if (moveX < 0) noteIcon.style.right = `${Math.min(-moveX - 40, 10)}px`;
+    });
+
+    li.addEventListener("touchend", e => {
+      let moveX = e.changedTouches[0].clientX - startX;
+      if (moveX > 100) {
+        if (confirm("⚠️ هل تريد بالتأكيد حذف هذا الرقم؟")) {
+          numbers.splice(index, 1);
+          saveNumbers();
+          renderList();
+        }
+      } else if (moveX < -100) {
+        editingIndex = index;
+        noteInput.value = item.note || "";
+        setTimeout(() => noteModal.classList.add("show"), 300);
+      }
+      li.style.transform = "translateX(0)";
+      deleteIcon.style.left = "-40px";
+      noteIcon.style.right = "-40px";
+    });
+
+    numberList.appendChild(li);
+  });
+  updateGroupCounter();
+}
+
+function reloadPage() {
+  if (confirm("هل أنت متأكد أنك تريد حذف كل الأرقام وإعادة تحميل الصفحة؟")) {
+    localStorage.removeItem('savedNumbers');
+    numbers = [];
+    renderList();
+  }
+}
+
+function checkDuplicate() {
+  const value = numberInput.value.trim();
+  if (value === '') { statusIcon.textContent = ''; return; }
+  if (numbers.some(item => item.number === value)) { statusIcon.textContent = '✔️'; statusIcon.style.color = 'green'; }
+  else { statusIcon.textContent = '❌'; statusIcon.style.color = 'red'; }
+}
+
+numberInput.addEventListener("keypress", e => { if (e.key === "Enter") addNumber(); });
+
+function saveNote() {
+  if (editingIndex !== null) {
+    numbers[editingIndex].note = noteInput.value.trim();
+    saveNumbers();
+    renderList();
+    closeModal();
+  }
+}
+
+function closeModal() { noteModal.classList.remove("show"); }
+
+// تحديث عداد المجموعات
+function updateGroupCounter() {
+  groupCounter.textContent = numbers.length;
+}
 </script>
 
 </body>
